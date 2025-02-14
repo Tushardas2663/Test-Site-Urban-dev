@@ -6,7 +6,8 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = "supersecretkey"
 jwt = JWTManager(app)
@@ -130,6 +131,93 @@ def create_test():
     conn.close()
 
     return jsonify({"message": "Test created successfully!"}), 201
+@app.route("/tests", methods=["GET"])
+@jwt_required()
+def get_tests():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, title FROM tests")
+    tests = cursor.fetchall()
+    conn.close()
+
+    return jsonify([{"id": test["id"], "title": test["title"]} for test in tests]), 200
+
+# Fetch questions for a selected test
+@app.route("/test/<int:test_id>", methods=["GET"])
+@jwt_required()
+def get_test_questions(test_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM questions WHERE test_id = ?", (test_id,))
+    questions = cursor.fetchall()
+    conn.close()
+
+    if not questions:
+        return jsonify({"error": "Test not found"}), 404
+
+    return jsonify([
+        {
+            "id": q["id"],
+            "question": q["question"],
+            "options": [q["option1"], q["option2"], q["option3"], q["option4"]],
+        } for q in questions
+    ]), 200
+
+# Submit answers and store results
+@app.route("/submit-test", methods=["POST"])
+@jwt_required()
+def submit_test():
+    data = request.json
+    user_email = get_jwt_identity()
+    test_id = data.get("test_id")
+    user_answers = data.get("answers", {})
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Fetch correct answers
+    cursor.execute("SELECT id, correct_answer FROM questions WHERE test_id = ?", (test_id,))
+    questions = cursor.fetchall()
+
+    # Calculate score
+    score = 0
+    for question in questions:
+        question_id = question["id"]
+        correct_answer = question["correct_answer"]
+        if user_answers.get(str(question_id)) == correct_answer:
+            score += 1
+
+    # Store result
+    cursor.execute("INSERT INTO results (user_email, test_id, score) VALUES (?, ?, ?)", 
+                   (user_email, test_id, score))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Test submitted successfully!", "score": score}), 200
+
+    @app.route("/progress", methods=["GET"])
+@jwt_required()
+def show_progress():
+    user_email = get_jwt_identity()
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Fetch test attempts and scores
+    cursor.execute("""
+        SELECT tests.title, results.score 
+        FROM results 
+        JOIN tests ON results.test_id = tests.id 
+        WHERE results.user_email = ?
+    """, (user_email,))
+    
+    progress_data = cursor.fetchall()
+    conn.close()
+
+    # Format response
+    progress_list = [{"test": row["title"], "score": row["score"]} for row in progress_data]
+
+    return jsonify(progress_list), 200
 
 
 

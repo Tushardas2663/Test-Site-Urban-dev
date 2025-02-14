@@ -7,7 +7,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateTest from "./pages/CreateTest";
+import TakeTest from "./pages/TakeTest";
 import UploadPDF from "./pages/UploadPDF";
+import TestPage from "./pages/TestPage";
 import ManualTest from "./pages/ManualTest";
 
 const App = () => {
@@ -21,6 +23,8 @@ const App = () => {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/create-test" element={<CreateTest />} />
         <Route path="/upload-pdf" element={<UploadPDF />} />
+        <Route path="/take-test" element={<TakeTest />} />
+        <Route path="/test/:testId" element={<TestPage />} />
         <Route path="/manual-test" element={<ManualTest />} />
         </Routes>
       </Router>

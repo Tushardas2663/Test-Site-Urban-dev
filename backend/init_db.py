@@ -34,10 +34,37 @@ def initialize_db():
         FOREIGN KEY (test_id) REFERENCES tests(id)
     );
     """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        test_id INTEGER NOT NULL,
+        question TEXT NOT NULL,
+        option1 TEXT NOT NULL,
+        option2 TEXT NOT NULL,
+        option3 TEXT NOT NULL,
+        option4 TEXT NOT NULL,
+        correct_answer TEXT NOT NULL,
+        FOREIGN KEY (test_id) REFERENCES tests(id)
+    );
+    """)
+
+    # Results Table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS results (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT NOT NULL,
+        test_id INTEGER NOT NULL,
+        score INTEGER NOT NULL,
+        FOREIGN KEY (user_email) REFERENCES users(email),
+        FOREIGN KEY (test_id) REFERENCES tests(id)
+    );
+    """)
 
     conn.commit()  # Save changes
     conn.close()   # Close connection
     print("Database initialized successfully!")
+
+
 
 if __name__ == "__main__":
     initialize_db()
