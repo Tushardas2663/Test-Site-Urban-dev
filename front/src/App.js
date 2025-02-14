@@ -6,6 +6,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreateTest from "./pages/CreateTest";
+import UploadPDF from "./pages/UploadPDF";
+import ManualTest from "./pages/ManualTest";
 
 const App = () => {
   return (
@@ -16,6 +19,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/create-test" element={<CreateTest />} />
+        <Route path="/upload-pdf" element={<UploadPDF />} />
+        <Route path="/manual-test" element={<ManualTest />} />
         </Routes>
       </Router>
     </AuthProvider>

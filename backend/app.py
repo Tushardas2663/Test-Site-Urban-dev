@@ -62,11 +62,11 @@ def login():
 @jwt_required()
 def dashboard():
     try:
-        email = get_jwt_identity()  # ✅ Ensure correct extraction of identity
+        email = get_jwt_identity() 
         if not email:
-            return jsonify({"error": "Unauthorized"}), 401  # 🔴 Handle missing identity
+            return jsonify({"error": "Unauthorized"}), 401  
 
-         # ✅ Ensure email is retrieved correctly
+         
 
         conn = get_db()
         cursor = conn.cursor()
@@ -86,7 +86,51 @@ def dashboard():
         }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # 🔴 Handle any server error
+        return jsonify({"error": str(e)}), 500  
+@app.route("/create-test", methods=["POST"])
+@jwt_required()  # Ensure the user is logged in
+def create_test():
+    data = request.json
+    test_title = data.get("title")
+    questions = data.get("questions")
+    creator_email = get_jwt_identity()  # Get the logged-in user's email
+
+    if not test_title or not questions:
+        return jsonify({"error": "Missing test title or questions"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Insert test into 'tests' table
+    cursor.execute("INSERT INTO tests (creator_email, title) VALUES (?, ?)", (creator_email, test_title))
+    test_id = cursor.lastrowid  # Get the ID of the newly created test
+
+    # Insert questions into a new 'questions' table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS questions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            test_id INTEGER NOT NULL,
+            question TEXT NOT NULL,
+            option1 TEXT,
+            option2 TEXT,
+            option3 TEXT,
+            option4 TEXT,
+            correct_answer TEXT,
+            FOREIGN KEY (test_id) REFERENCES tests(id)
+        );
+    """)
+
+    for q in questions:
+        cursor.execute("""
+            INSERT INTO questions (test_id, question, option1, option2, option3, option4, correct_answer)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (test_id, q["question"], q["options"][0], q["options"][1], q["options"][2], q["options"][3], q["correctAnswer"]))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Test created successfully!"}), 201
+
 
 
 if __name__ == "__main__":
