@@ -4,9 +4,17 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import sqlite3
-
+import fitz
+import random
+import os
+import re
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
-
+STATIC_DIRECTORY = "static"
+if not os.path.exists(STATIC_DIRECTORY):
+    os.makedirs(STATIC_DIRECTORY)
+app.config["UPLOAD_FOLDER"] = "uploads"
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = "supersecretkey"
@@ -221,7 +229,88 @@ def show_progress():
 
     return jsonify(progress_list), 200
 
+@app.route("/upload_pdf", methods=["POST"])
+@jwt_required()
+def upload_pdf():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
 
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    if not file.filename.endswith(".pdf"):
+        return jsonify({"error": "Only PDF files are allowed"}), 400
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(filepath)
+
+    extracted_text = extract_text_from_pdf(filepath)
+    mcq_questions = parse_structured_mcqs(extracted_text)
+
+    if not mcq_questions:
+        return jsonify({"error": "No questions found in the PDF!"}), 400
+
+    user_email = get_jwt_identity()
+    test_id = save_test_to_db(user_email, filename[:-3], mcq_questions)
+
+    return jsonify({"message": "Test created successfully", "test_id": test_id}), 201
+
+
+def extract_text_from_pdf(filepath):
+    """Extracts text from a structured PDF."""
+    text = ""
+    doc = fitz.open(filepath)
+
+    for page in doc:
+        text += page.get_text("text") + "\n"
+
+    return text.strip()
+
+
+def parse_structured_mcqs(text):
+    """Parses structured MCQs from extracted text."""
+    pattern = re.compile(
+        r"Question:\s*(.*?)\nOptions:\s*a\)\s*(.*?)\n\s*b\)\s*(.*?)\n\s*c\)\s*(.*?)\n\s*d\)\s*(.*?)\nAnswer:\s*([a-d])",
+        re.DOTALL | re.IGNORECASE
+    )
+
+    questions = []
+    matches = pattern.findall(text)
+
+    for match in matches:
+        question, opt1, opt2, opt3, opt4, correct_option = match
+        options = [opt1, opt2, opt3, opt4]
+        correct_answer = options[ord(correct_option.lower()) - ord('a')]
+
+        questions.append({
+            "question": question.strip(),
+            "options": options,
+            "correctAnswer": correct_answer
+        })
+
+    return questions
+
+
+def save_test_to_db(user_email, title, questions):
+    """Saves the extracted MCQ test to the database."""
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO tests (creator_email, title) VALUES (?, ?)", (user_email, title))
+    test_id = cursor.lastrowid
+
+    for q in questions:
+        cursor.execute("""
+            INSERT INTO questions (test_id, question, option1, option2, option3, option4, correct_answer)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (test_id, q["question"], q["options"][0], q["options"][1], q["options"][2], q["options"][3], q["correctAnswer"]))
+
+    conn.commit()
+    conn.close()
+
+    return test_id
 
 if __name__ == "__main__":
     app.run(debug=True)
