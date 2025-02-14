@@ -1,0 +1,74 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(to right, #1e3c72, #2a5298); 
+    color: white;
+}
+
+
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    text-align: center;
+}
+
+
+.title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.options {
+    display: flex;
+    gap: 20px;
+}
+
+
+.btn {
+    text-decoration: none;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.summarizer-btn {
+    background-color: #ff9a8b;
+    color: white;
+    border: 2px solid #ff6f61;
+}
+.summarizer-btn:hover {
+    background-color: #ff6f61;
+}
+
+
+.poetry-btn {
+    background-color: #a18cd1;
+    color: white;
+    border: 2px solid #7b60c8;/*hover and border same*/
+}
+
+.poetry-btn:hover {
+    background-color: #7b60c8;
+}
+.savedpoetry-btn {
+    background-color: yellow;
+    color: rgb(39, 46, 173);
+    border: 2px solid #ffc861;}
+.savedpoetry-btn:hover{
+    background-color: #ffc861;
+}
