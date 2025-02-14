@@ -28,7 +28,7 @@ const UploadPDF = () => {
         },
       });
 
-      setExtractedText(res.data.extracted_text);
+      setExtractedText(res.data.extracted_text);window.alert("Test Saved Successfully");
     } catch (error) {
       console.error("Upload error:", error);
       alert("Error uploading file");

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import styles from "../showProgress.module.css"; // ✅ Import the CSS
 
 const ShowProgress = () => {
   const [progress, setProgress] = useState([]);
@@ -100,7 +101,7 @@ const ShowProgress = () => {
   };
 
   return (
-    <div>
+    <div className={styles["progress-container"]}>
       <h2>Your Progress Over Time</h2>
 
       {progress.length === 0 ? (
@@ -109,7 +110,7 @@ const ShowProgress = () => {
         <>
           {/* Progress Table */}
           <h3>Test Results</h3>
-          <table border="1">
+          <table className={styles["progress-table"]}>
             <thead>
               <tr>
                 <th>Test Number</th>
@@ -130,11 +131,15 @@ const ShowProgress = () => {
 
           {/* Line Graph */}
           <h3>Score Trend (Line Graph)</h3>
-          <canvas ref={lineChartRef} width={500} height={300} style={{ border: "1px solid black" }} />
+          <div className={styles["chart-container"]}>
+            <canvas ref={lineChartRef} width={500} height={300} />
+          </div>
 
           {/* Bar Graph */}
           <h3>Score Comparison (Bar Chart)</h3>
-          <canvas ref={barChartRef} width={500} height={300} style={{ border: "1px solid black" }} />
+          <div className={styles["chart-container"]}>
+            <canvas ref={barChartRef} width={500} height={300} />
+          </div>
         </>
       )}
     </div>

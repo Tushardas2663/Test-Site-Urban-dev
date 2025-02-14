@@ -12,6 +12,8 @@ import UploadPDF from "./pages/UploadPDF";
 import TestPage from "./pages/TestPage";
 import ManualTest from "./pages/ManualTest";
 import ShowProgress from "./pages/ShowProgress";
+import CommunityForum from "./pages/CommunityForum";
+import MainPage from "./pages/MainPage";
 
 
 const App = () => {
@@ -29,6 +31,8 @@ const App = () => {
         <Route path="/progress" element={<ShowProgress />} />
         <Route path="/test/:testId" element={<TestPage />} />
         <Route path="/manual-test" element={<ManualTest />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/community-forum" element={<CommunityForum />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -7,7 +7,9 @@ import sqlite3
 import fitz
 import random
 import os
+import google.generativeai as genai
 import re
+from datetime import datetime
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 STATIC_DIRECTORY = "static"
@@ -311,6 +313,51 @@ def save_test_to_db(user_email, title, questions):
     conn.close()
 
     return test_id
+@app.route("/comments", methods=["GET"])
+def get_comments():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM comments ORDER BY timestamp DESC")
+    comments = cursor.fetchall()
+    conn.close()
+
+    return jsonify([{"id": row["id"], "user": row["user"], "content": row["content"], "timestamp": row["timestamp"]} for row in comments])
+
+def create_comments_table():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user TEXT NOT NULL,
+            content TEXT NOT NULL,
+            timestamp TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Call this function to ensure table exists when the server starts
+create_comments_table()
+@app.route("/comments", methods=["POST"])
+@jwt_required()
+def post_comment():
+    data = request.json
+    user_email = get_jwt_identity() 
+    content = data.get("content", "").strip()
+
+    if not content:
+        return jsonify({"error": "Comment cannot be empty"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO comments (user, content, timestamp) VALUES (?, ?, ?)", 
+                   (user_email, content, datetime.now()))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Comment posted successfully"}), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True)

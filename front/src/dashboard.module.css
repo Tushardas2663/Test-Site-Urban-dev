@@ -1,0 +1,81 @@
+/* 📌 Dashboard Container */
+.dashboard {
+    display: flex;
+    flex-direction: column; /* ✅ Stack items vertically */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* 📌 Header Styling */
+  .dashboard h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* 📌 Button Container */
+  .dashboard-buttons {
+    display: flex;
+    flex-direction: column; /* ✅ Stack buttons vertically */
+    gap: 15px;
+    width: 100%;
+    max-width: 300px; /* ✅ Keeps buttons aligned and not too wide */
+    margin-top: 20px;
+  }
+  
+  /* 📌 Stylish Buttons */
+  .dashboard-buttons button {
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+  }
+  
+  .dashboard-buttons button:hover {
+    background: #4834d4;
+    transform: scale(1.05);
+  }
+  
+  /* 📌 Dashboard Data Section */
+  .dashboard-data {
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .dashboard-data p {
+    font-size: 1.2rem;
+    color: #444;
+  }
+  
+  /* 📌 Loading Text */
+  .loading {
+    font-size: 1.2rem;
+    color: #999;
+    margin-top: 20px;
+  }
+  
+  /* 📌 Mobile Responsive */
+  @media (max-width: 600px) {
+    .dashboard-buttons {
+      max-width: 250px; /* ✅ Slightly smaller buttons on small screens */
+    }
+  }
+  

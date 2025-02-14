@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Ensure correct import
+import { AuthContext } from "../context/AuthContext"; 
+import styles from "../dashboard.module.css"; // ✅ Import the CSS Module
 
 const Dashboard = () => {
-  const navigate=useNavigate();
-  const { user, logout } = useContext(AuthContext); // Get user from context
+  const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext); 
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
@@ -34,28 +35,27 @@ const Dashboard = () => {
   }, [logout]);
 
   return (
-
     <div>
-      
       <h1>Welcome, {user?.sub}</h1>
       
-    <div className="dashboard">
-      <h1>Dashboard</h1>
-      <div className="dashboard-buttons">
-        <button onClick={() => navigate("/create-test")}>Create Test</button>
-        <button onClick={() => navigate("/take-test")}>Take Test</button>
-        <button onClick={() => navigate("/progress")}>Show Progress</button>
-        <button onClick={() => navigate("/leaderboard")}>Leaderboard</button>
+      <div className={styles.dashboard}>
+        <h1>Dashboard</h1>
+        <div className={styles["dashboard-buttons"]}>
+          <button onClick={() => navigate("/create-test")}>Create Test</button>
+          <button onClick={() => navigate("/take-test")}>Take Test</button>
+          <button onClick={() => navigate("/progress")}>Show Progress</button>
+          <button onClick={() => navigate("/leaderboard")}>Leaderboard</button>
+          <button onClick={() => navigate("/community-forum")}>Community Forum</button>
+        </div>
       </div>
-    </div>
   
       {dashboardData ? (
-        <div>
+        <div className={styles["dashboard-data"]}>
           <p>Tests Taken: {dashboardData.tests_taken}</p>
           <p>Tests Created: {dashboardData.tests_created}</p>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p className={styles.loading}>Loading...</p>
       )}
     </div>
   );

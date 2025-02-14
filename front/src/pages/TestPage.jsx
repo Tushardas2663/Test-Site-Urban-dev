@@ -7,6 +7,8 @@ const TestPage = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(15); // 15 minutes in seconds
+  const [windowChanged, setWindowChanged] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -30,6 +32,37 @@ const TestPage = () => {
 
     fetchQuestions();
   }, [testId, navigate]);
+
+  // Timer logic
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      handleSubmit();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        alert("You switched the window! Test will be auto-submitted.");
+        setWindowChanged(true);
+        handleSubmit();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   const handleOptionChange = (questionId, selectedOption) => {
     setAnswers({ ...answers, [questionId]: selectedOption });
@@ -57,9 +90,19 @@ const TestPage = () => {
     }
   };
 
+  // Format time (mm:ss)
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
   return (
     <div>
       <h2>Test Questions</h2>
+      <h3>Time Left: {formatTime(timeLeft)}</h3>
+      {windowChanged && <p style={{ color: "red" }}>Test auto-submitted due to window switch!</p>}
+
       {questions.length === 0 ? (
         <p>Loading questions...</p>
       ) : (
