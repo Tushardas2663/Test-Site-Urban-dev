@@ -97,12 +97,12 @@ def dashboard():
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
 @app.route("/create-test", methods=["POST"])
-@jwt_required()  # Ensure the user is logged in
+@jwt_required() 
 def create_test():
     data = request.json
     test_title = data.get("title")
     questions = data.get("questions")
-    creator_email = get_jwt_identity()  # Get the logged-in user's email
+    creator_email = get_jwt_identity()  
 
     if not test_title or not questions:
         return jsonify({"error": "Missing test title or questions"}), 400
@@ -213,7 +213,7 @@ def show_progress():
     conn = get_db()
     cursor = conn.cursor()
 
-    # Fetch test attempts and scores
+    
     cursor.execute("""
         SELECT tests.title, results.score 
         FROM results 
@@ -224,7 +224,7 @@ def show_progress():
     progress_data = cursor.fetchall()
     conn.close()
 
-    # Format response
+   
     progress_list = [{"test": row["title"], "score": row["score"]} for row in progress_data]
 
     return jsonify(progress_list), 200

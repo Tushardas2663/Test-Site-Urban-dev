@@ -10,24 +10,24 @@ const ManualTest = () => {
     correctAnswer: "" 
   });
 
-  // Handle question input change
+
   const handleQuestionChange = (e) => {
     setNewQuestion({ ...newQuestion, question: e.target.value });
   };
 
-  // Handle option change
+  
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index] = value;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
   };
 
-  // Handle correct answer selection
+ 
   const handleCorrectAnswerChange = (e) => {
     setNewQuestion({ ...newQuestion, correctAnswer: e.target.value });
   };
 
-  // Add question to the list
+
   const addQuestion = () => {
     if (newQuestion.question.trim() && newQuestion.correctAnswer.trim()) {
       setQuestions([...questions, newQuestion]);
@@ -37,14 +37,14 @@ const ManualTest = () => {
     }
   };
 
-  // Submit test to backend
+ 
   const submitTest = async () => {
     if (!testTitle.trim() || questions.length === 0) {
       alert("Please enter a test title and add at least one question.");
       return;
     }
 
-    const token = localStorage.getItem("token"); // Get JWT token
+    const token = localStorage.getItem("token");
     if (!token) {
       alert("Session expired. Please log in again.");
       return;
@@ -54,7 +54,7 @@ const ManualTest = () => {
       const response = await axios.post(
         "http://127.0.0.1:5000/create-test",
         { title: testTitle, questions },
-        { headers: { Authorization: `Bearer ${token}` } } // Send token for authentication
+        { headers: { Authorization: `Bearer ${token}` } } 
       );
 
       alert(response.data.message);
