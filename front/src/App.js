@@ -11,6 +11,8 @@ import TakeTest from "./pages/TakeTest";
 import UploadPDF from "./pages/UploadPDF";
 import TestPage from "./pages/TestPage";
 import ManualTest from "./pages/ManualTest";
+import ShowProgress from "./pages/ShowProgress";
+
 
 const App = () => {
   return (
@@ -24,6 +26,7 @@ const App = () => {
           <Route path="/create-test" element={<CreateTest />} />
         <Route path="/upload-pdf" element={<UploadPDF />} />
         <Route path="/take-test" element={<TakeTest />} />
+        <Route path="/progress" element={<ShowProgress />} />
         <Route path="/test/:testId" element={<TestPage />} />
         <Route path="/manual-test" element={<ManualTest />} />
         </Routes>

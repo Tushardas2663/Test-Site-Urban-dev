@@ -36,7 +36,8 @@ const Dashboard = () => {
   return (
 
     <div>
-      <h1>Welcome, {user?.email}</h1>
+      
+      <h1>Welcome, {user?.sub}</h1>
       
     <div className="dashboard">
       <h1>Dashboard</h1>

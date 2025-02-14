@@ -181,12 +181,14 @@ def submit_test():
 
     # Calculate score
     score = 0
+    total_score=0
     for question in questions:
         question_id = question["id"]
         correct_answer = question["correct_answer"]
+        total_score+=1
         if user_answers.get(str(question_id)) == correct_answer:
             score += 1
-
+    score=score*100/total_score
     # Store result
     cursor.execute("INSERT INTO results (user_email, test_id, score) VALUES (?, ?, ?)", 
                    (user_email, test_id, score))
@@ -195,7 +197,7 @@ def submit_test():
 
     return jsonify({"message": "Test submitted successfully!", "score": score}), 200
 
-    @app.route("/progress", methods=["GET"])
+@app.route("/progress", methods=["GET"])
 @jwt_required()
 def show_progress():
     user_email = get_jwt_identity()
