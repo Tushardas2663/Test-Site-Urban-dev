@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    color: white;
+    background-color:#06104f;
+}
+
+.logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffd700;
+}
+.container{
+    height: 100vh;
+    display: flex;
+
+}
+.navbar{
+    position: fixed;
+    width: 100vw;
+}
+.left{
+    margin: 24px 0;
+    width: 25%;
+    border: 1px solid black;
+    height: 100vh;
+    background-color: #07004D;
+    position: fixed;
+    overflow: hidden;
+    top: 55px;
+}
+.right{
+    margin-top: 50px;
+    width: 75%;
+    border: 2px solid blue;
+    overflow-y: auto;
+    height: 100vh;
+    display: block;
+    margin-left: 25%;  
+    padding: 20px;
+    background-image: url('study_image.jpg');
+}
+
+.iit,.jee,.aims,.wbjee,.box{
+    width: 400px;
+    height: 200px;
+    border: 1px solid ;
+    /* padding: 70px ; */
+    margin: 25px;
+    border-radius: 3px;
+}
+
+.cont{
+    display: flex;
+    justify-content:  space-around;
+    align-items: center;
+}
+.space{
+    margin: 400px;
+}
+
+.exams{
+    display: flex;
+    justify-content: center;
+    font-size: 28px;
+    color: rgb(8, 8, 8);
+    font-weight: bold;
+}
+.test{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+.sub_test{
+    text-decoration:none ;
+    color: white;
+
+
+}
+.sub_test:hover{
+    transition: transform 0.3s ease, color 0.3s ease;
+    transform: scale(1.2);
+
+    
+}
+.sub{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:15px;
+    margin: 350px 0;
+}
+.profile{
+    margin: 0 155px;
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 40px;
+}
+.strong{
+    margin-top: 15px;
+    text-align: center;
+    color: white;
+}
+.b1{
+    color:white;
+    font-weight: bold;
+    border:1px solid black;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width : 250px;
+    height: 100px;
+    font-size: 30px;
+    background-color: rgb(28, 27, 27);
+
+    
+}
+.b1:hover{
+transition: transform  1s ease;
+transform: scale(1.2);
+}
+.space{
+    width: 30vw;
+    filter: blur();
+}
+.main_box{
+    margin-top:450px;
+}
+.blur{
+    margin-top:50px;
+    height: 300px;
+    width: 750px;
+    backdrop-filter: blur(10px);
+    margin-left: 200px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+}
+.logo{
+    margin-right: 580px;
+}
+.blur h1{
+    margin-left: 191px;
+    margin-top: -106px;
+}
+#m_id1{
+    margin-left: 148px;
+}
+#m_id2{
+    margin-left: 115px;
+}

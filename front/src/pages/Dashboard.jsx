@@ -46,6 +46,7 @@ const Dashboard = () => {
           <button onClick={() => navigate("/progress")}>Show Progress</button>
           <button onClick={() => navigate("/leaderboard")}>Leaderboard</button>
           <button onClick={() => navigate("/community-forum")}>Community Forum</button>
+          <button onClick={() => navigate("/main")}>Goto Main Page</button>
         </div>
       </div>
   

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circles Quiz</title>
+    <style>
+        body {
+            background-color: rgb(21, 21, 3);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h2 {
+            color: #fff;
+            background-color: rgb(112, 66, 169);
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgb(112, 66, 169);
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            font-size: 18px;
+            color: black;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .options label {
+            display: block;
+            background-color: white;
+            color: #333;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .options label:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .correct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .incorrect {
+            background-color: #E74C3C !important;
+            color: white !important;
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Circles Quiz</h2>
+    <div class="quiz-container">
+        <div class="question">1. What is the equation of a circle with center (h, k) and radius r?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q1"> (x - h)² + (y - k)² = r²</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> x² + y² = r²</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> x² - y² = r²</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> x² + y² - r² = 0</label>
+        </div>
+
+        <div class="question">2. What is the center of the circle given by x² + y² - 4x + 6y - 12 = 0?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> (4, 6)</label>
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q2"> (2, -3)</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> (-2, 3)</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> (0, 0)</label>
+        </div>
+
+        <div class="question">3. A line is tangent to a circle if:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q3"> It touches the circle at exactly one point</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> It passes through the center</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> It cuts the circle at two points</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> It does not touch the circle</label>
+        </div>
+
+        <div class="question">4. The radius of the circle x² + y² = 25 is:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 25</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 10</label>
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q4"> 5</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 50</label>
+        </div>
+
+        <div class="question">5. The equation of the circle with center at origin and radius 7 is:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q5"> x² + y² = 49</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> x² + y² = 7</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> x² + y² + 49 = 0</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> x² - y² = 49</label>
+        </div>
+
+        <div id="result">Your Score: 0/5</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+
+        function checkAnswer(element, isCorrect) {
+            let parent = element.parentNode;
+            let questionName = element.querySelector("input").name;
+
+            if (answeredQuestions.has(questionName)) return;
+
+            answeredQuestions.add(questionName);
+
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("incorrect");
+            }
+
+            document.getElementById("result").innerText = "Your Score: " + score + "/5";
+        }
+    </script>
+</body>
+</html>

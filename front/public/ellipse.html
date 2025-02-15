@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ellipse & Hyperbola Quiz</title>
+    <style>
+        body {
+            background-color: rgb(21, 21, 3);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h2 {
+            color: #fff;
+            background-color: rgb(112, 66, 169);
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgb(112, 66, 169);
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            font-size: 18px;
+            color: black;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .options label {
+            display: block;
+            background-color: white;
+            color: #333;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .options label:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .correct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .incorrect {
+            background-color: #E74C3C !important;
+            color: white !important;
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ellipse & Hyperbola Quiz</h2>
+    <div class="quiz-container">
+        <div class="question">1. What is the standard equation of an ellipse?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q1"> x²/a² + y²/b² = 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> y = ax² + bx + c</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> x² - y² = 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> Ax + By + C = 0</label>
+        </div>
+
+        <div class="question">2. The foci of an ellipse lie on:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q2"> The major axis</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> The minor axis</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> The directrix</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> The asymptotes</label>
+        </div>
+
+        <div class="question">3. What is the equation of a hyperbola?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q3"> x²/a² - y²/b² = 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> x² + y² = r²</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> y = mx + c</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> Ax + By + C = 0</label>
+        </div>
+
+        <div class="question">4. The asymptotes of a hyperbola help in:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q4"> Defining its shape</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> Finding its foci</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> Determining its eccentricity</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> Calculating its center</label>
+        </div>
+
+        <div class="question">5. The eccentricity of a hyperbola is always:</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q5"> Greater than 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Equal to 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Less than 1</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Zero</label>
+        </div>
+
+        <div id="result">Your Score: 0/5</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+
+        function checkAnswer(element, isCorrect) {
+            let parent = element.parentNode;
+            let questionName = element.querySelector("input").name;
+
+            if (answeredQuestions.has(questionName)) return;
+
+            answeredQuestions.add(questionName);
+
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("incorrect");
+            }
+
+            document.getElementById("result").innerText = "Your Score: " + score + "/5";
+        }
+    </script>
+</body>
+</html>

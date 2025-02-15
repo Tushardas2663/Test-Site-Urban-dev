@@ -1,18 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // Ensure you have AuthContext
 import styles from "../mainPage.module.css"; // Scoped CSS
 import eduLogo from "../assets/edu-logo.jpg";
-import chatbotIcon from "../assets/chatbot-icon.png"; // Add chatbot icon in assets
+import chatbotIcon from "../assets/chatbot-icon.png"; // Chatbot icon in assets
 
 const MainPage = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [userQuery, setUserQuery] = useState("");
   const [botResponse, setBotResponse] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false); // Track expanded state
+  const { logout } = useContext(AuthContext); // Use context for logout
+  const navigate = useNavigate(); // Hook to navigate
 
-  // Toggle chatbot
+  // Toggle chatbot visibility
   const toggleChatbot = () => {
     setChatOpen(!chatOpen);
-    setBotResponse(""); // Reset response when opening new chat
+    setBotResponse("");
   };
 
   // Send query to backend
@@ -28,11 +32,18 @@ const MainPage = () => {
 
       const data = await response.json();
       setBotResponse(data.response);
+      setIsExpanded(true); // Expand chatbot if response is large
       setUserQuery("");
     } catch (error) {
       console.error("Error fetching AI response:", error);
       setBotResponse("Sorry, I couldn't process that. Try again.");
     }
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    logout(); // Call logout function from context
+    navigate("/login"); // Redirect to login page
   };
 
   return (
@@ -44,10 +55,12 @@ const MainPage = () => {
           <Link to="/">eduVATE</Link>
         </div>
         <ul className={styles.navLinks}>
-          <li><Link to="/mock-tests">Mock Tests</Link></li>
           <li><Link to="/leaderboard">Leaderboard</Link></li>
-          <li><Link to="/community">Community</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
+          <li><Link to="/community-forum">Community</Link></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li>
+            <button className={styles.logoutBtn} onClick={handleLogout}>Logout</button>
+          </li>
         </ul>
       </nav>
 
@@ -63,9 +76,9 @@ const MainPage = () => {
         </div>
 
         <div className={styles.sub}>
-          <Link to="/tests/physics" className={styles.subTest}><h3>Physics</h3></Link>
+          <a href="/physics.html" className={styles.subTest}><h3>Physics</h3></a>
           <Link to="/tests/chemistry" className={styles.subTest}><h3>Chemistry</h3></Link>
-          <Link to="/tests/mathematics" className={styles.subTest}><h3>Mathematics</h3></Link>
+          <a href="/mathematics.html" className={styles.subTest}><h3>Mathematics</h3></a>
         </div>
       </div>
 
@@ -80,12 +93,12 @@ const MainPage = () => {
         {/* Test Categories */}
         <div className={styles.mainBox}>
           <div className={styles.cont}>
-            <div className={`${styles.b1} ${styles.iit}`}>IIT ADVANCED</div>
-            <div className={`${styles.b1} ${styles.jee}`}>JEE MAINS</div>
+            <Link to="/iit-advanced" className={`${styles.b1} ${styles.iit}`}>IIT ADVANCED</Link>
+            <Link to="/iit-advanced" className={`${styles.b1} ${styles.jee}`}>JEE MAINS</Link>
           </div>
           <div className={styles.cont}>
-            <div className={`${styles.b1} ${styles.aims}`}>NEET EXAM</div>
-            <div className={`${styles.b1} ${styles.wbjee}`}>WB JEE</div>
+            <Link to="/iit-advanced" className={`${styles.b1} ${styles.aims}`}>NEET EXAM</Link>
+            <Link to="/iit-advanced" className={`${styles.b1} ${styles.wbjee}`}>WB JEE</Link>
           </div>
         </div>
 
@@ -96,7 +109,8 @@ const MainPage = () => {
           </div>
 
           {chatOpen && (
-            <div className={styles.chatbotWindow}>
+            <div className={`${styles.chatbotWindow} ${isExpanded ? styles.expandedChat : ""}`}>
+              <button className={styles.closeChat} onClick={toggleChatbot}>✖</button>
               <p className={styles.chatbotText}>I am your personalized doubt support. Ask me any doubt!</p>
               <input
                 type="text"
@@ -106,7 +120,7 @@ const MainPage = () => {
                 className={styles.chatInput}
               />
               <button onClick={sendQuery} className={styles.chatSendBtn}>Send</button>
-              {botResponse && <p className={styles.botResponse}>{botResponse}</p>}
+              <div className={styles.botResponse}>{botResponse}</div>
             </div>
           )}
         </div>

@@ -21,7 +21,19 @@ CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = "supersecretkey"
 jwt = JWTManager(app)
+genai.configure(api_key='AIzaSyAXu4EJPl2-_G1K4x3KfLxQfLHdLspZdu4')
+model = genai.GenerativeModel("gemini-1.5-flash")
+@app.route("/chat", methods=["POST"])
+def chatbot():
+    data = request.json
+    query = data.get("query")
 
+    if not query:
+        return jsonify({"response": "Please provide a question."})
+
+    # Get response from Gemini AI
+    response=model.generate_content("Answer the following question succinctly under 100 words: "+query)
+    return jsonify({"response": response.text})
 def get_db():
     conn = sqlite3.connect("mock_test.db")
     conn.row_factory = sqlite3.Row
@@ -358,6 +370,30 @@ def post_comment():
 
     return jsonify({"message": "Comment posted successfully"}), 201
 
+def get_leaderboard():
+    conn = sqlite3.connect("mock_test.db")
+    cursor = conn.cursor()
+
+    # Aggregate total score per user and order by highest score
+    cursor.execute("""
+        SELECT user_email, SUM(score) AS total_score 
+        FROM results 
+        GROUP BY user_email 
+        ORDER BY total_score DESC 
+        LIMIT 10;
+    """)
+    
+    leaderboard = cursor.fetchall()  # List of tuples (user_email, total_score)
+    conn.close()
+
+    # Convert to a list of dictionaries
+    leaderboard_data = [{"email": user[0], "total_score": user[1]} for user in leaderboard]
+    
+    return leaderboard_data
+
+@app.route("/leaderboard", methods=["GET"])
+def leaderboard():
+    return jsonify(get_leaderboard())
 
 if __name__ == "__main__":
     app.run(debug=True)

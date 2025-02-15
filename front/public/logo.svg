@@ -1,0 +1,34 @@
+<svg width="50" height="50" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <circle cx="150" cy="150" r="140" fill="black" stroke="cyan" stroke-width="4"/>
+
+    <path d="M70 180 Q150 100 230 180" fill="none" stroke="cyan" stroke-width="5" filter="url(#glow)"/>
+    <path d="M70 180 Q150 260 230 180" fill="none" stroke="blue" stroke-width="5" filter="url(#glow)"/>
+
+    <circle cx="150" cy="90" r="20" fill="yellow" filter="url(#glow)"/>
+    <rect x="140" y="110" width="20" height="20" fill="yellow" filter="url(#glow)"/>
+
+    <line x1="150" y1="60" x2="150" y2="40" stroke="yellow" stroke-width="3" filter="url(#glow)"/>
+    <line x1="170" y1="65" x2="185" y2="50" stroke="yellow" stroke-width="3" filter="url(#glow)"/>
+    <line x1="130" y1="65" x2="115" y2="50" stroke="yellow" stroke-width="3" filter="url(#glow)"/>
+
+    <text x="80" y="220" font-size="30" fill="cyan" font-weight="bold" filter="url(#glow)">Edu</text>
+    <text x="170" y="220" font-size="30" fill="blue" font-weight="bold" filter="url(#glow)">vate</text>
+
+    <text x="100" y="250" font-size="14" fill="white" font-style="italic" filter="url(#glow)">To Educate, To Innovate</text>
+</svg>
+
+
+
+
+
+

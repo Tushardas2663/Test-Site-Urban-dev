@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Quiz</title>
+    <style>
+        body {
+            background-color: rgb(21, 21, 3);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h2 {
+            color: #fff;
+            background-color: rgb(112, 66, 169);
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgb(112, 66, 169);
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            font-size: 18px;
+            color: black;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .options label {
+            display: block;
+            background-color: white;
+            color: #111;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .options label:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .correct {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .incorrect {
+            background-color: #E74C3C !important;
+            color: white !important;
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Physics Quiz</h2>
+    <div class="quiz-container">
+        <div class="question">1. What is Newton's Second Law of Motion?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q1"> F = ma</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> v = u + at</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> W = mg</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q1"> P = VI</label>
+        </div>
+
+        <div class="question">2. What is the SI unit of charge?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q2"> Coulomb</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> Newton</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> Joule</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q2"> Watt</label>
+        </div>
+
+        <div class="question">3. Which law states that like charges repel and unlike charges attract?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q3"> Coulomb's Law</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> Ohm's Law</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> Kirchhoff's Law</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q3"> Ampere's Law</label>
+        </div>
+
+        <div class="question">4. What is the speed of light in vacuum?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q4"> 3 × 10⁸ m/s</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 3 × 10⁶ m/s</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 3 × 10⁴ m/s</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q4"> 3 × 10² m/s</label>
+        </div>
+
+        <div class="question">5. What type of mirror is used in car rearview mirrors?</div>
+        <div class="options">
+            <label onclick="checkAnswer(this, true)"><input type="radio" name="q5"> Convex mirror</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Concave mirror</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Plane mirror</label>
+            <label onclick="checkAnswer(this, false)"><input type="radio" name="q5"> Cylindrical mirror</label>
+        </div>
+
+        <div id="result">Your Score: 0/5</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+
+        function checkAnswer(element, isCorrect) {
+            let parent = element.parentNode;
+            let questionName = element.querySelector("input").name;
+
+            if (answeredQuestions.has(questionName)) return;
+
+            answeredQuestions.add(questionName);
+
+            if (isCorrect) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("incorrect");
+            }
+
+            document.getElementById("result").innerText = "Your Score: " + score + "/5";
+        }
+    </script>
+</body>
+</html>

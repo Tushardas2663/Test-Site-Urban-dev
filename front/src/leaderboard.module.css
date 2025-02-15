@@ -1,0 +1,28 @@
+.container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .leaderboardTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .leaderboardTable th,
+  .leaderboardTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  .leaderboardTable th {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .topRank {
+    font-weight: bold;
+    background-color: gold;
+  }
+  
