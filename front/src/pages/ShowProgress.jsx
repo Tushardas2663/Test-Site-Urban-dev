@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import styles from "../showProgress.module.css"; // ✅ Import the CSS
+import styles from "../showProgress.module.css"; // Import the CSS
 
 const ShowProgress = () => {
   const [progress, setProgress] = useState([]);
+  const [aiComment, setAiComment] = useState(""); // Store AI comment
   const lineChartRef = useRef(null);
   const barChartRef = useRef(null);
 
+  // Fetch progress data from the backend
   useEffect(() => {
     const fetchProgress = async () => {
       const token = localStorage.getItem("token");
@@ -27,6 +29,9 @@ const ShowProgress = () => {
         }));
 
         setProgress(formattedData);
+
+        // 🔹 Fetch AI comment after progress data is loaded
+        fetchAIComment(formattedData);
       } catch (error) {
         alert("Error fetching progress.");
       }
@@ -35,6 +40,21 @@ const ShowProgress = () => {
     fetchProgress();
   }, []);
 
+  // Function to fetch AI-generated progress comment
+  const fetchAIComment = async (progressData) => {
+    try {
+      const res = await axios.post("http://127.0.0.1:5000/progress-comment", {
+        progress: progressData,
+      });
+
+      setAiComment(res.data.comment);
+    } catch (error) {
+      console.error("Error fetching AI comment:", error);
+      setAiComment("Unable to generate a comment at the moment.");
+    }
+  };
+
+  // Draw line chart
   useEffect(() => {
     if (progress.length > 0) {
       drawLineChart();
@@ -42,7 +62,6 @@ const ShowProgress = () => {
     }
   }, [progress]);
 
-  // Function to draw line chart
   const drawLineChart = () => {
     const canvas = lineChartRef.current;
     if (!canvas) return;
@@ -77,7 +96,6 @@ const ShowProgress = () => {
     ctx.stroke();
   };
 
-  // Function to draw bar chart
   const drawBarChart = () => {
     const canvas = barChartRef.current;
     if (!canvas) return;
@@ -140,6 +158,14 @@ const ShowProgress = () => {
           <div className={styles["chart-container"]}>
             <canvas ref={barChartRef} width={500} height={300} />
           </div>
+
+          {/* AI-Powered Analysis */}
+          {aiComment && (
+            <div className={styles["ai-comment-box"]}>
+              <h3>AI Progress Analysis</h3>
+              <p>{aiComment}</p>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -34,6 +34,31 @@ def chatbot():
     # Get response from Gemini AI
     response=model.generate_content("Answer the following question succinctly under 100 words: "+query)
     return jsonify({"response": response.text})
+@app.route("/progress-comment", methods=["POST"])
+def get_progress_comment():
+    data = request.json  # Get progress data from frontend
+    scores = data.get("progress", [])
+
+    if not scores:
+        return jsonify({"comment": "No progress data found."})
+
+    # 🔹 Generate a prompt for Gemini
+    prompt = f"""
+    A student has taken multiple tests, and here are their scores:
+
+    {', '.join([f'{test["testName"]}: {test["score"]}' for test in scores])}.
+
+    Based on these scores, analyze their progress. Provide a friendly and motivational comment.
+    """
+
+    # 🔹 Call Gemini AI
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(prompt)
+    ai_comment = response.text.strip()
+
+    return jsonify({"comment": ai_comment})
+
+
 def get_db():
     conn = sqlite3.connect("mock_test.db")
     conn.row_factory = sqlite3.Row

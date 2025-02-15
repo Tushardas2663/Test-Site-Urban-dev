@@ -4,6 +4,7 @@ import axios from "axios";
 const UploadPDF = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [extractedText, setExtractedText] = useState("");
+  const [testDuration, setTestDuration] = useState(""); // New state for time input
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -15,8 +16,14 @@ const UploadPDF = () => {
       return;
     }
 
+    if (!testDuration || testDuration <= 0) {
+      alert("Please enter a valid test duration in minutes.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", selectedFile);
+    formData.append("duration", testDuration); // Send test duration to backend
 
     try {
       const token = localStorage.getItem("token");
@@ -42,7 +49,7 @@ const UploadPDF = () => {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    background: "linear-gradient(135deg, #FF416C, #FF4B2B)", // Beautiful red-pink gradient
+    background: "linear-gradient(135deg, #FF416C, #FF4B2B)",
     color: "#fff",
     fontFamily: "Arial, sans-serif",
     textAlign: "center",
@@ -55,7 +62,7 @@ const UploadPDF = () => {
     textShadow: "2px 2px 10px rgba(0, 0, 0, 0.2)",
   };
 
-  const fileInputStyle = {
+  const inputStyle = {
     padding: "10px",
     fontSize: "1rem",
     marginBottom: "20px",
@@ -100,12 +107,17 @@ const UploadPDF = () => {
   return (
     <div style={containerStyle}>
       <h1 style={headingStyle}>Upload PDF to Create Test</h1>
+      <input type="file" accept="application/pdf" onChange={handleFileChange} style={inputStyle} />
+
+      {/* New Time Input Field */}
       <input
-        type="file"
-        accept="application/pdf"
-        onChange={handleFileChange}
-        style={fileInputStyle}
+        type="number"
+        placeholder="Enter Test Duration (minutes)"
+        value={testDuration}
+        onChange={(e) => setTestDuration(e.target.value)}
+        style={inputStyle}
       />
+
       <button
         style={buttonStyle}
         onMouseOver={(e) => Object.assign(e.target.style, buttonHoverStyle)}
